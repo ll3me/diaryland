@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
+import { Icon } from "astro-icon/components";
 import {
   SITE_TITLE,
   SITE_DESCRIPTION,
@@ -42,9 +43,17 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
         >
           {SITE_TITLE}
         </a>
-        <div class="flex gap-6 text-sm text-stone-600">
+        <div class="flex gap-6 text-sm text-stone-600 items-center">
           <a href="/" class="hover:text-stone-900 transition-colors">首页</a>
           <a href="/about" class="hover:text-stone-900 transition-colors">关于</a>
+          <a
+            href="https://github.com/ll3me/diaryland"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="hover:text-stone-900 transition-colors"
+          >
+            <Icon name="github" class="w-6 h-6" />
+          </a>
         </div>
       </nav>
     </header>
