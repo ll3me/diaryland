@@ -1,0 +1,35 @@
+---
+import Blog from "../layouts/Blog.astro";
+import { SITE_TITLE, SITE_DESCRIPTION, SOCIALS } from "../consts";
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+
+const posts = (await getCollection("posts")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
+);
+---
+
+<Blog title={`关于 - ${SITE_TITLE}`}>
+  <div class="prose prose-stone mx-auto">
+    <p class="text-lg text-stone-700 mb-4">{SITE_DESCRIPTION}</p>
+
+    <div class="flex gap-4 mb-8">
+      {
+        SOCIALS.map(
+          (social) =>
+            social.url && (
+              <a
+                href={social.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-stone-500 hover:text-stone-900 transition-colors"
+              >
+                <Icon name={social.icon} class="w-6 h-6" />
+                <span class="sr-only">{social.name}</span>
+              </a>
+            ),
+        )
+      }
+    </div>
+  </div>
+</Blog>
