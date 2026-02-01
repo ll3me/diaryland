@@ -20,3 +20,5 @@ export const SOCIALS = [
         icon: "lucide:mail",
     },
 ];
+
+export const PAGE_SIZE = 4;
