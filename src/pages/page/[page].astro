@@ -1,0 +1,53 @@
+---
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import Blog from '../../layouts/Blog.astro'
+import { SITE_TITLE, PAGE_SIZE } from '../../consts'
+import { Icon } from 'astro-icon/components'
+import type { GetStaticPaths } from 'astro'
+import PostList from '../../components/PostList.astro'
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const posts = (await getCollection('posts')).sort(
+    (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+  )
+  return paginate(posts, { pageSize: PAGE_SIZE }).filter(page => page.params.page !== '1')
+}) satisfies GetStaticPaths
+
+const { page } = Astro.props
+---
+
+<Blog title={`第${page.currentPage}页 - ${SITE_TITLE}`}>
+  <div class="mt-6 flex flex-col gap-10">
+    <h2 class="text-3xl font-bold border-b border-stone-200 mb-4">
+      最新文章 - 第{page.currentPage}页
+    </h2>
+    <PostList posts={page.data} />
+    <div class="flex flex-row mt-auto">
+      <a
+        class="text-lg text-stone-800 font-mono shrink-0 flex items-center gap-1 hover:text-stone-400 transition-colors group"
+        href={`${page.currentPage === 2 ? '/' : `/page/${page.currentPage - 1}`}`}
+      >
+        <Icon
+          name="lucide:arrow-left"
+          class="size-5 transition-transform group-hover:-translate-x-1"
+        />
+        上一页
+      </a>
+      {
+        page.currentPage < page.lastPage && (
+          <a
+            class="text-lg text-stone-800 font-mono shrink-0 flex items-center gap-1 ml-auto hover:text-stone-400 transition-colors group"
+            href={`/page/${page.currentPage + 1}`}
+          >
+            下一页
+            <Icon
+              name="lucide:arrow-right"
+              class="size-5 transition-transform group-hover:translate-x-1"
+            />
+          </a>
+        )
+      }
+    </div>
+  </div>
+</Blog>
