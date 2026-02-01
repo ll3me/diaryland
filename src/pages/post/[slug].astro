@@ -34,9 +34,16 @@ const { Content } = await entry.render()
       <Content />
     </div>
     <div class="mt-8">
-      <a href="/" class="text-stone-500 hover:text-stone-800 hover:underline transition-colors"
-        >&larr; 返回首页</a
+      <a
+        href="/"
+        class="flex items-center gap-1 text-stone-500 hover:text-stone-800 hover:underline transition-colors group"
       >
+        <Icon
+          name="lucide:arrow-left"
+          class="size-4 transition-transform group-hover:-translate-x-1"
+        />
+        返回首页
+      </a>
     </div>
   </article>
 </Blog>
