@@ -1,3 +1,41 @@
 @import "tailwindcss";
 @plugin "@tailwindcss/typography";
 @custom-variant dark (&:where(.dark, .dark *));
+
+.page-progress {
+  background: #1d4ed8;
+  box-shadow:
+    0 1px 0 rgb(30 64 175 / 0.35),
+    0 0 8px rgb(37 99 235 / 0.28);
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 60;
+  height: 2px;
+  opacity: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:
+    opacity 200ms ease,
+    transform 420ms ease;
+}
+
+.dark .page-progress {
+  background: #38bdf8;
+  box-shadow: none;
+}
+
+.page-progress.is-loading {
+  opacity: 1;
+  transform: scaleX(0.08);
+}
+
+.page-progress.is-loading.is-started {
+  transform: scaleX(0.72);
+}
+
+.page-progress.is-complete {
+  opacity: 1;
+  transform: scaleX(1);
+  transition-duration: 180ms;
+}

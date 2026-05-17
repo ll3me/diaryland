@@ -80,12 +80,18 @@ const canonicalUrl = new URL(
         document.documentElement.style.colorScheme = theme;
       })();
     </script>
-    <ClientRouter />
+    <ClientRouter fallback="swap" />
     <title>{title}</title>
   </head>
   <body
     class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col transition-colors dark:bg-stone-950 dark:text-stone-100"
   >
+    <div
+      data-page-progress
+      data-astro-transition-persist="page-progress"
+      class="page-progress"
+    >
+    </div>
     <header
       class="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50 transition-colors dark:bg-stone-950/80 dark:border-stone-800"
     >
@@ -215,6 +221,54 @@ const canonicalUrl = new URL(
           });
 
           setupThemeToggle();
+        })();
+      </script>
+      <script is:inline>
+        (() => {
+          if (window.__diarylandProgressController) return;
+          window.__diarylandProgressController = true;
+
+          let finishTimer;
+          let resetTimer;
+          let startedAt = 0;
+
+          const getProgress = () =>
+            document.querySelector("[data-page-progress]");
+
+          const startProgress = () => {
+            const progress = getProgress();
+            if (!progress) return;
+
+            clearTimeout(finishTimer);
+            clearTimeout(resetTimer);
+            startedAt = Date.now();
+            progress.classList.remove("is-started", "is-complete");
+            progress.classList.add("is-loading");
+
+            requestAnimationFrame(() => {
+              progress.classList.add("is-started");
+            });
+          };
+
+          const finishProgress = () => {
+            const progress = getProgress();
+            if (!progress) return;
+
+            const elapsed = Date.now() - startedAt;
+            const remaining = Math.max(0, 220 - elapsed);
+
+            finishTimer = window.setTimeout(() => {
+              progress.classList.remove("is-started");
+              progress.classList.add("is-complete");
+
+              resetTimer = window.setTimeout(() => {
+                progress.classList.remove("is-loading", "is-started", "is-complete");
+              }, 260);
+            }, remaining);
+          };
+
+          document.addEventListener("astro:before-preparation", startProgress);
+          document.addEventListener("astro:page-load", finishProgress);
         })();
       </script>
   </body>
