@@ -18,13 +18,13 @@ const { page } = Astro.props
 
 <Blog title={`第${page.currentPage}页 - ${SITE_TITLE}`}>
   <div class="mt-6 flex flex-col gap-10">
-    <h2 class="text-3xl font-bold border-b border-stone-200 mb-4">
+    <h2 class="text-3xl font-bold border-b border-stone-200 mb-4 dark:border-stone-800">
       最新文章 - 第{page.currentPage}页
     </h2>
     <PostList posts={page.data} />
     <div class="flex flex-row mt-auto">
       <a
-        class="text-lg text-stone-800 font-mono shrink-0 flex items-center gap-1 hover:text-stone-400 transition-colors group"
+        class="text-lg text-stone-800 font-mono shrink-0 flex items-center gap-1 hover:text-stone-400 transition-colors group dark:text-stone-200 dark:hover:text-stone-500"
         href={`${page.currentPage === 2 ? '/' : `/page/${page.currentPage - 1}`}`}
       >
         <Icon
@@ -36,7 +36,7 @@ const { page } = Astro.props
       {
         page.currentPage < page.lastPage && (
           <a
-            class="text-lg text-stone-800 font-mono shrink-0 flex items-center gap-1 ml-auto hover:text-stone-400 transition-colors group"
+            class="text-lg text-stone-800 font-mono shrink-0 flex items-center gap-1 ml-auto hover:text-stone-400 transition-colors group dark:text-stone-200 dark:hover:text-stone-500"
             href={`/page/${page.currentPage + 1}`}
           >
             下一页

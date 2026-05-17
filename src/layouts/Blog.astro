@@ -33,6 +33,7 @@ const canonicalUrl = new URL(
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="canonical" href={canonicalUrl} />
     <link
@@ -61,33 +62,60 @@ const canonicalUrl = new URL(
     <meta name="twitter:card" content="summary" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
+    <script is:inline>
+      (() => {
+        const storedTheme = (() => {
+          try {
+            return localStorage.getItem("theme");
+          } catch {
+            return null;
+          }
+        })();
+        const prefersDark = window.matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches;
+        const theme = storedTheme ?? (prefersDark ? "dark" : "light");
+
+        document.documentElement.classList.toggle("dark", theme === "dark");
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
     <ClientRouter />
     <title>{title}</title>
   </head>
   <body
-    class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col"
+    class="bg-stone-50 text-stone-800 font-sans antialiased min-h-screen flex flex-col transition-colors dark:bg-stone-950 dark:text-stone-100"
   >
     <header
-      class="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50"
+      class="bg-white/80 backdrop-blur-md border-b border-stone-200 sticky top-0 z-50 transition-colors dark:bg-stone-950/80 dark:border-stone-800"
     >
       <nav
         class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between"
       >
         <a
           href="/"
-          class="text-lg font-semibold tracking-tight hover:text-stone-600 transition-colors"
+          class="text-lg font-semibold tracking-tight hover:text-stone-600 transition-colors dark:hover:text-stone-300"
         >
           {SITE_TITLE}
         </a>
-        <div class="flex gap-6 text-sm text-stone-600 items-center">
-          <a href="/" class="hover:text-stone-900 transition-colors">首页</a>
-          <a href="/about" class="hover:text-stone-900 transition-colors">关于</a>
+        <div class="flex gap-5 text-sm text-stone-600 items-center dark:text-stone-400">
+          <a href="/" class="hover:text-stone-900 transition-colors dark:hover:text-stone-100">首页</a>
+          <a href="/about" class="hover:text-stone-900 transition-colors dark:hover:text-stone-100">关于</a>
+          <button
+            type="button"
+            data-theme-toggle
+            aria-label="切换夜间模式"
+            class="inline-flex size-6 items-center justify-center hover:text-stone-900 transition-colors dark:hover:text-stone-100"
+          >
+            <Icon name="lucide:sun" class="hidden size-5 dark:block" />
+            <Icon name="lucide:moon" class="size-5 dark:hidden" />
+          </button>
           <a
             href="https://github.com/ll3me/diaryland"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
-            class="hover:text-stone-900 transition-colors"
+            class="hover:text-stone-900 transition-colors dark:hover:text-stone-100"
           >
             <Icon name="github" class="w-6 h-6" />
           </a>
@@ -99,7 +127,7 @@ const canonicalUrl = new URL(
       </main>
 
       <footer
-        class="max-w-3xl mx-auto px-4 sm:px-6 py-8 w-full border-t border-stone-200 text-center text-stone-500 text-xs"
+        class="max-w-3xl mx-auto px-4 sm:px-6 py-8 w-full border-t border-stone-200 text-center text-stone-500 text-xs transition-colors dark:border-stone-800 dark:text-stone-500"
       >
         <div class="space-y-1">
           <div>&copy; {new Date().getFullYear()} {SITE_TITLE}.</div>
@@ -131,5 +159,63 @@ const canonicalUrl = new URL(
           }
         </div>
       </footer>
+      <script is:inline>
+        (() => {
+          if (window.__diarylandThemeController) return;
+          window.__diarylandThemeController = true;
+
+          const getStoredTheme = () => {
+            try {
+              return localStorage.getItem("theme");
+            } catch {
+              return null;
+            }
+          };
+
+          const getPreferredTheme = () => {
+            const storedTheme = getStoredTheme();
+            if (storedTheme) return storedTheme;
+
+            return window.matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+          };
+
+          const applyTheme = (theme, root = document.documentElement) => {
+            root.classList.toggle("dark", theme === "dark");
+            root.style.colorScheme = theme;
+          };
+
+          const setupThemeToggle = () => {
+            const toggle = document.querySelector("[data-theme-toggle]");
+            if (!toggle || toggle.dataset.themeToggleBound) return;
+            toggle.dataset.themeToggleBound = "true";
+
+            toggle.addEventListener("click", () => {
+              const currentTheme = document.documentElement.classList.contains(
+                "dark",
+              )
+                ? "dark"
+                : "light";
+              const nextTheme = currentTheme === "dark" ? "light" : "dark";
+              try {
+                localStorage.setItem("theme", nextTheme);
+              } catch {}
+              applyTheme(nextTheme);
+            });
+          };
+
+          document.addEventListener("astro:before-swap", (event) => {
+            applyTheme(getPreferredTheme(), event.newDocument.documentElement);
+          });
+
+          document.addEventListener("astro:page-load", () => {
+            applyTheme(getPreferredTheme());
+            setupThemeToggle();
+          });
+
+          setupThemeToggle();
+        })();
+      </script>
   </body>
 </html>
