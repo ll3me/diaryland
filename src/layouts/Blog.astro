@@ -12,9 +12,20 @@ import {
 interface Props {
   title?: string;
   description?: string;
+  type?: "website" | "article";
+  pubDate?: Date;
 }
 
-const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
+const {
+  title = SITE_TITLE,
+  description = SITE_DESCRIPTION,
+  type = "website",
+  pubDate,
+} = Astro.props;
+const canonicalUrl = new URL(
+  Astro.url.pathname,
+  Astro.site ?? Astro.url,
+).toString();
 ---
 
 <!doctype html>
@@ -23,8 +34,33 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalUrl} />
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={SITE_TITLE}
+      href="/rss.xml"
+    />
     <meta name="generator" content={Astro.generator} />
-    <!-- <meta name="description" content={description} /> -->
+    <meta name="robots" content="index, follow" />
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={type} />
+    <meta property="og:url" content={canonicalUrl} />
+    <meta property="og:site_name" content={SITE_TITLE} />
+    <meta property="og:locale" content="zh_CN" />
+    {
+      type === "article" && pubDate && (
+        <meta
+          property="article:published_time"
+          content={pubDate.toISOString()}
+        />
+      )
+    }
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
     <ClientRouter />
     <title>{title}</title>
   </head>
@@ -50,6 +86,7 @@ const { title = SITE_TITLE, description = SITE_DESCRIPTION } = Astro.props;
             href="https://github.com/ll3me/diaryland"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub"
             class="hover:text-stone-900 transition-colors"
           >
             <Icon name="github" class="w-6 h-6" />

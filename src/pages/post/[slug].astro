@@ -21,7 +21,12 @@ const { entry } = Astro.props
 const { Content } = await entry.render()
 ---
 
-<Blog title={`${entry.data.title} - ${SITE_TITLE}`}>
+<Blog
+  title={`${entry.data.title} - ${SITE_TITLE}`}
+  description={entry.data.description}
+  type="article"
+  pubDate={entry.data.pubDate}
+>
   <article class="prose prose-stone max-w-none mt-6">
     <h1 class="text-3xl font-bold mb-4">{entry.data.title}</h1>
     <div class="text-stone-500 mb-8 text-sm">
