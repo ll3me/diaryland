@@ -1,7 +1,9 @@
 ---
-title: 'aaa'
-description: '测试分页功能'
+title: '关于 RSS 和元数据'
+description: '给博客补齐 RSS、页面描述和 Open Graph 信息，方便订阅和分享。'
 pubDate: 2024-03-23
 ---
 
-test
+博客即使内容不多，也应该尽早补上机器可读的信息。
+
+RSS 能让读者订阅更新，页面元数据则会影响链接预览和搜索结果里的展示效果。

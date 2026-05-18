@@ -1,9 +1,9 @@
 ---
-title: "Hello World"
-description: "这是第一篇测试文章"
+title: '重新整理这个博客'
+description: '给这个小博客定一个更清晰的方向，从记录日常开发和写作开始。'
 pubDate: 2024-03-20
 ---
 
-欢迎来到 DiaryLand。这是使用 Astro Content Collections 创建的第一篇文章。
+这个博客暂时还是一个很小的空间，但它需要先有稳定的内容结构。
 
-这里支持 Markdown 语法。
+接下来会把零散的想法整理成文章，也会把连续主题收进系列里，避免首页只有一串没有关系的标题。
