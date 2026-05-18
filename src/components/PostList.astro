@@ -1,31 +1,76 @@
 ---
-import type { CollectionEntry } from 'astro:content'
 import { Icon } from 'astro-icon/components'
+import { SERIES_PREVIEW_SIZE } from '../consts'
+import { getSeriesPath } from '../lib/posts'
+import type { FeedItem } from '../lib/posts'
 
-const { posts } = Astro.props as { posts: CollectionEntry<'posts'>[] }
+const { items } = Astro.props as { items: FeedItem[] }
 ---
 
 <ul class="flex flex-col gap-8">
   {
-    posts.map(post => (
-      <li class="group flex flex-col gap-2 hover:bg-stone-100 p-2 -mx-2 rounded-lg transition-colors dark:hover:bg-stone-900">
-        <div class="sm:flex-row sm:justify-between sm:items-baseline">
-          <a href={`/post/${post.slug}`} class="block hover:underline">
-            <h3 class="text-2xl font-medium text-stone-800 group-hover:text-stone-600 transition-colors dark:text-stone-100 dark:group-hover:text-stone-300">
-              {post.data.title}
-            </h3>
-          </a>
-        </div>
-        {post.data.description && (
-          <p class="text-stone-500 mt-1 line-clamp-2 text-m leading-relaxed dark:text-stone-400">
-            {post.data.description}
-          </p>
-        )}
-        <time class="text-m text-stone-400 font-mono shrink-0 flex items-center gap-1 dark:text-stone-500">
-          <Icon name="lucide:calendar-arrow-up" class="size-4" />
-          {post.data.pubDate.toLocaleDateString('zh-CN')}
-        </time>
-      </li>
+    items.map(item => (
+      item.type === 'series' ? (
+        <li class="flex flex-col gap-4 py-2 -mx-2">
+          <div class="flex items-center gap-2 px-2 text-stone-800 dark:text-stone-100">
+            <Icon name="lucide:rows-3" class="size-5 text-blue-700 dark:text-sky-400" />
+            <h3 class="text-2xl font-medium">{item.title}</h3>
+          </div>
+          <ol class="ml-3 flex flex-col gap-3 border-l border-stone-200 pl-4 dark:border-stone-800">
+            {item.posts.slice(0, SERIES_PREVIEW_SIZE).map(post => (
+              <li class="group rounded-lg p-2 -mx-2 transition-colors hover:bg-stone-100 dark:hover:bg-stone-900">
+                <a href={`/post/${post.slug}`} class="block hover:underline">
+                  <h4 class="text-xl font-medium text-stone-800 transition-colors group-hover:text-stone-600 dark:text-stone-100 dark:group-hover:text-stone-300">
+                    {post.data.title}
+                  </h4>
+                </a>
+                {post.data.description && (
+                  <p class="mt-1 line-clamp-2 text-m leading-relaxed text-stone-500 dark:text-stone-400">
+                    {post.data.description}
+                  </p>
+                )}
+                <time class="mt-2 flex shrink-0 items-center gap-1 font-mono text-m text-stone-400 dark:text-stone-500">
+                  <Icon name="lucide:calendar-arrow-up" class="size-4" />
+                  {post.data.pubDate.toLocaleDateString('zh-CN')}
+                </time>
+              </li>
+            ))}
+            {item.posts.length > SERIES_PREVIEW_SIZE && (
+              <li>
+                <a
+                  href={getSeriesPath(item)}
+                  class="inline-flex items-center gap-1 rounded-lg p-2 -mx-2 font-mono text-m text-blue-700 transition-colors hover:text-blue-900 hover:underline dark:text-sky-400 dark:hover:text-sky-300 group"
+                >
+                  查看全部 {item.posts.length} 篇
+                  <Icon
+                    name="lucide:arrow-right"
+                    class="size-4 transition-transform group-hover:translate-x-1"
+                  />
+                </a>
+              </li>
+            )}
+          </ol>
+        </li>
+      ) : (
+        <li class="group flex flex-col gap-2 hover:bg-stone-100 p-2 -mx-2 rounded-lg transition-colors dark:hover:bg-stone-900">
+          <div class="sm:flex-row sm:justify-between sm:items-baseline">
+            <a href={`/post/${item.post.slug}`} class="block hover:underline">
+              <h3 class="text-2xl font-medium text-stone-800 group-hover:text-stone-600 transition-colors dark:text-stone-100 dark:group-hover:text-stone-300">
+                {item.post.data.title}
+              </h3>
+            </a>
+          </div>
+          {item.post.data.description && (
+            <p class="text-stone-500 mt-1 line-clamp-2 text-m leading-relaxed dark:text-stone-400">
+              {item.post.data.description}
+            </p>
+          )}
+          <time class="text-m text-stone-400 font-mono shrink-0 flex items-center gap-1 dark:text-stone-500">
+            <Icon name="lucide:calendar-arrow-up" class="size-4" />
+            {item.post.data.pubDate.toLocaleDateString('zh-CN')}
+          </time>
+        </li>
+      )
     ))
   }
 </ul>

@@ -21,4 +21,5 @@ export const SOCIALS = [
     },
 ];
 
-export const PAGE_SIZE = 4;
+export const PAGE_SIZE = 6;
+export const SERIES_PREVIEW_SIZE = 3;
