@@ -27,3 +27,14 @@ series:
 ## 后续空间
 
 等基础结构稳定后，再补分页、系列、RSS 和更完整的文章阅读体验。
+
+```ts
+import { defineCollection, z } from 'astro:content'
+
+const posts = defineCollection({
+  schema: z.object({
+    title: z.string(),
+    pubDate: z.date(),
+  }),
+})
+```
