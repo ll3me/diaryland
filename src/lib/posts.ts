@@ -27,12 +27,38 @@ export type FeedPage = {
   data: FeedItem[]
 }
 
+export type PostNavigation =
+  | {
+      type: 'series'
+      series: Pick<SeriesItem, 'title' | 'slug'>
+      index: number
+      total: number
+      previous?: Post
+      next?: Post
+    }
+  | {
+      type: 'timeline'
+      previous?: Post
+      next?: Post
+    }
+
 const getSeriesOrder = (post: Post) => {
   return post.data.series?.order
 }
 
 export const sortPostsByDateDesc = (posts: Post[]) =>
   [...posts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+const sortPostsByDateAsc = (posts: Post[]) =>
+  [...posts].sort((a, b) => {
+    const dateDiff = a.data.pubDate.valueOf() - b.data.pubDate.valueOf()
+
+    if (dateDiff !== 0) {
+      return dateDiff
+    }
+
+    return a.slug.localeCompare(b.slug)
+  })
 
 export const createSeriesItems = (posts: Post[], seriesEntries: Series[]): SeriesItem[] => {
   const seriesMap = new Map(
@@ -154,3 +180,56 @@ export const paginatePostFeed = (
 }
 
 export const getSeriesPath = (series: Pick<SeriesItem, 'slug'>) => `/series/${series.slug}`
+
+export const getPostPath = (post: Pick<Post, 'slug'>) => `/post/${post.slug}`
+
+export const getPostNavigation = (
+  currentPost: Post,
+  posts: Post[],
+  seriesEntries: Series[]
+): PostNavigation | null => {
+  const seriesSlug = currentPost.data.series?.slug
+
+  if (seriesSlug) {
+    const series = createSeriesItems(posts, seriesEntries).find(series => series.slug === seriesSlug)
+
+    if (!series) {
+      return null
+    }
+
+    const index = series.posts.findIndex(post => post.slug === currentPost.slug)
+
+    if (index === -1) {
+      return null
+    }
+
+    return {
+      type: 'series',
+      series,
+      index,
+      total: series.posts.length,
+      previous: series.posts[index - 1],
+      next: series.posts[index + 1],
+    }
+  }
+
+  const timelinePosts = sortPostsByDateAsc(posts.filter(post => !post.data.series))
+  const index = timelinePosts.findIndex(post => post.slug === currentPost.slug)
+
+  if (index === -1) {
+    return null
+  }
+
+  const previous = timelinePosts[index - 1]
+  const next = timelinePosts[index + 1]
+
+  if (!previous && !next) {
+    return null
+  }
+
+  return {
+    type: 'timeline',
+    previous,
+    next,
+  }
+}

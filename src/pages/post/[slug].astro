@@ -4,20 +4,28 @@ import type { CollectionEntry } from 'astro:content'
 import Blog from '../../layouts/Blog.astro'
 import { Icon } from 'astro-icon/components'
 import { SITE_TITLE } from '../../consts'
+import { getPostNavigation, getPostPath, getSeriesPath } from '../../lib/posts'
+import type { PostNavigation } from '../../lib/posts'
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts')
+  const series = await getCollection('series')
+
   return posts.map(entry => ({
     params: { slug: entry.slug },
-    props: { entry },
+    props: {
+      entry,
+      navigation: getPostNavigation(entry, posts, series),
+    },
   }))
 }
 
 interface Props {
   entry: CollectionEntry<'posts'>
+  navigation: PostNavigation | null
 }
 
-const { entry } = Astro.props
+const { entry, navigation } = Astro.props
 const { Content, headings } = await entry.render()
 const tocHeadings = headings.filter(heading => heading.depth >= 2 && heading.depth <= 3)
 ---
@@ -67,6 +75,106 @@ const tocHeadings = headings.filter(heading => heading.depth >= 2 && heading.dep
     <div class="text-stone-800 dark:text-stone-200">
       <Content />
     </div>
+    {
+      navigation?.type === 'series' && (
+        <nav
+          aria-label="系列文章导航"
+          class="not-prose mt-10 border-y border-stone-200 py-5 dark:border-stone-800"
+        >
+          <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+            <a
+              href={getSeriesPath(navigation.series)}
+              class="inline-flex items-center gap-2 font-medium text-stone-800 transition-colors hover:text-stone-500 hover:underline dark:text-stone-100 dark:hover:text-stone-300"
+            >
+              <Icon name="lucide:rows-3" class="size-4 text-blue-700 dark:text-sky-400" />
+              {navigation.series.title}
+            </a>
+            <span class="font-mono text-sm text-stone-400 dark:text-stone-500">
+              第 {navigation.index + 1} / {navigation.total} 篇
+            </span>
+          </div>
+          <div class="grid gap-3 sm:grid-cols-2">
+            {navigation.previous && (
+              <a
+                href={getPostPath(navigation.previous)}
+                class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+              >
+                <span class="flex items-center gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
+                  <Icon
+                    name="lucide:arrow-left"
+                    class="size-3.5 transition-transform group-hover:-translate-x-1"
+                  />
+                  系列上一篇
+                </span>
+                <span class="mt-2 text-sm font-medium leading-relaxed text-stone-700 dark:text-stone-200">
+                  {navigation.previous.data.title}
+                </span>
+              </a>
+            )}
+            {navigation.next && (
+              <a
+                href={getPostPath(navigation.next)}
+                class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 text-right transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+              >
+                <span class="flex items-center justify-end gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
+                  系列下一篇
+                  <Icon
+                    name="lucide:arrow-right"
+                    class="size-3.5 transition-transform group-hover:translate-x-1"
+                  />
+                </span>
+                <span class="mt-2 text-sm font-medium leading-relaxed text-stone-700 dark:text-stone-200">
+                  {navigation.next.data.title}
+                </span>
+              </a>
+            )}
+          </div>
+        </nav>
+      )
+    }
+    {
+      navigation?.type === 'timeline' && (
+        <nav
+          aria-label="文章时间线导航"
+          class="not-prose mt-10 grid gap-3 border-y border-stone-200 py-5 dark:border-stone-800 sm:grid-cols-2"
+        >
+          {navigation.previous && (
+            <a
+              href={getPostPath(navigation.previous)}
+              class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+            >
+              <span class="flex items-center gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
+                <Icon
+                  name="lucide:arrow-left"
+                  class="size-3.5 transition-transform group-hover:-translate-x-1"
+                />
+                上一篇
+              </span>
+              <span class="mt-2 text-sm font-medium leading-relaxed text-stone-700 dark:text-stone-200">
+                {navigation.previous.data.title}
+              </span>
+            </a>
+          )}
+          {navigation.next && (
+            <a
+              href={getPostPath(navigation.next)}
+              class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 text-right transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+            >
+              <span class="flex items-center justify-end gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
+                下一篇
+                <Icon
+                  name="lucide:arrow-right"
+                  class="size-3.5 transition-transform group-hover:translate-x-1"
+                />
+              </span>
+              <span class="mt-2 text-sm font-medium leading-relaxed text-stone-700 dark:text-stone-200">
+                {navigation.next.data.title}
+              </span>
+            </a>
+          )}
+        </nav>
+      )
+    }
     <div class="mt-8">
       <a
         href="/"
