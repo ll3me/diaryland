@@ -2,6 +2,7 @@
 title: '建立内容集合'
 description: '用 Content Collections 约束文章字段，让标题、摘要和日期都有明确类型。'
 pubDate: 2024-03-23
+tags: ['astro', 'blog']
 series:
   slug: 'xxx'
   order: 2

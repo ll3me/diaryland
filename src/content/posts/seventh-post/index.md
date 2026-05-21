@@ -2,6 +2,7 @@
 title: '关于 RSS 和元数据'
 description: '给博客补齐 RSS、页面描述和 Open Graph 信息，方便订阅和分享。'
 pubDate: 2024-03-23
+tags: ['rss', 'seo']
 ---
 
 ## 必要性

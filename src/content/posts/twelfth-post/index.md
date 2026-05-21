@@ -2,6 +2,7 @@
 title: '首页如何展示系列'
 description: '系列在首页应该像一个目录块，而不是把所有文章摊平成普通列表。'
 pubDate: 2024-03-24
+tags: ['series', 'blog', 'ux']
 series:
   slug: 'yyy'
   order: 2

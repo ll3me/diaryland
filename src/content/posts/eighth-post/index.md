@@ -2,6 +2,7 @@
 title: '让分页更符合内容密度'
 description: '分页数量不能只看条目数，系列预览也会影响一页的实际长度。'
 pubDate: 2024-03-23
+tags: ['pagination', 'ux']
 ---
 
 ## 问题

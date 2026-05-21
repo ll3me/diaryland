@@ -2,6 +2,7 @@
 title: '把零散想法收进系列'
 description: '系列不是标签，而是一组有阅读顺序的文章目录。'
 pubDate: 2024-03-23
+tags: ['series', 'writing']
 series:
   slug: 'yyy'
   order: 1

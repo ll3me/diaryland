@@ -2,6 +2,7 @@
 title: '重新整理这个博客'
 description: '给这个小博客定一个更清晰的方向，从记录日常开发和写作开始。'
 pubDate: 2024-03-20
+tags: ['writing', 'blog']
 ---
 
 ## 起点

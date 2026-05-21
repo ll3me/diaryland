@@ -2,6 +2,7 @@
 title: '初始化 Astro 项目'
 description: '从一个干净的 Astro 项目开始，先把目录结构和基础脚本搭起来。'
 pubDate: 2024-03-23
+tags: ['astro', 'blog']
 series:
   slug: 'xxx'
   order: 1

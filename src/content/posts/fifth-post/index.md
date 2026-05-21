@@ -2,6 +2,7 @@
 title: '拆出统一布局'
 description: '把页面外壳、导航、元数据和主题脚本集中到统一布局里维护。'
 pubDate: 2024-03-23
+tags: ['astro', 'ux']
 series:
   slug: 'xxx'
   order: 3
