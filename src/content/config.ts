@@ -5,6 +5,7 @@ const posts = defineCollection({
     title: z.string(),
     description: z.string(),
     pubDate: z.date(),
+    draft: z.boolean().default(false),
     tags: z.array(z.string()).default([]),
     series: z
       .object({

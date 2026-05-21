@@ -1,10 +1,10 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
-import { getCollection } from "astro:content";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
+import { getPublishedPosts } from "../lib/posts";
 
 export async function GET(context: APIContext) {
-  const posts = await getCollection("posts");
+  const posts = await getPublishedPosts();
 
   posts.sort((a, b) => {
     const dateDiff = b.data.pubDate.valueOf() - a.data.pubDate.valueOf();

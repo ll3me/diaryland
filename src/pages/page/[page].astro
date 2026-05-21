@@ -5,11 +5,11 @@ import { PAGE_SIZE, SERIES_PREVIEW_SIZE, SITE_TITLE } from '../../consts'
 import { Icon } from 'astro-icon/components'
 import type { GetStaticPaths } from 'astro'
 import PostList from '../../components/PostList.astro'
-import { createPostFeed, paginatePostFeed, sortPostsByDateDesc } from '../../lib/posts'
+import { createPostFeed, getPosts, paginatePostFeed, sortPostsByDateDesc } from '../../lib/posts'
 import type { FeedPage } from '../../lib/posts'
 
 export const getStaticPaths = (async () => {
-  const posts = sortPostsByDateDesc(await getCollection('posts'))
+  const posts = sortPostsByDateDesc(await getPosts())
   const series = await getCollection('series')
   const feedItems = createPostFeed(posts, series)
   const pages = paginatePostFeed(feedItems, PAGE_SIZE, SERIES_PREVIEW_SIZE)

@@ -4,11 +4,11 @@ import { Icon } from 'astro-icon/components'
 import type { GetStaticPaths } from 'astro'
 import Blog from '../../layouts/Blog.astro'
 import { SITE_TITLE } from '../../consts'
-import { createSeriesItems, sortPostsByDateDesc } from '../../lib/posts'
+import { createSeriesItems, getPosts, sortPostsByDateDesc } from '../../lib/posts'
 import type { SeriesItem } from '../../lib/posts'
 
 export const getStaticPaths = (async () => {
-  const posts = sortPostsByDateDesc(await getCollection('posts'))
+  const posts = sortPostsByDateDesc(await getPosts())
   const series = await getCollection('series')
   const seriesItems = createSeriesItems(posts, series)
 

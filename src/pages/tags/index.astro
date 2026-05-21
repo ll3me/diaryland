@@ -3,9 +3,10 @@ import { getCollection } from 'astro:content'
 import { Icon } from 'astro-icon/components'
 import Blog from '../../layouts/Blog.astro'
 import { SITE_TITLE } from '../../consts'
+import { getPosts } from '../../lib/posts'
 import { createTagItems, getTagPath } from '../../lib/tags'
 
-const posts = await getCollection('posts')
+const posts = await getPosts()
 const tags = await getCollection('tags')
 const tagItems = createTagItems(posts, tags)
 ---

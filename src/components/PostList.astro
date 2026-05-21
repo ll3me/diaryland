@@ -32,6 +32,13 @@ const { items } = Astro.props as { items: FeedItem[] }
                 <time class="mt-2 flex shrink-0 items-center gap-1 font-mono text-m text-stone-400 dark:text-stone-500">
                   <Icon name="lucide:calendar-arrow-up" class="size-4" />
                   {post.data.pubDate.toLocaleDateString('zh-CN')}
+                  {
+                    post.data.draft && (
+                      <span class="ml-1 rounded-md border border-amber-200 px-1.5 py-0.5 text-xs text-amber-700 dark:border-amber-900 dark:text-amber-400">
+                        草稿
+                      </span>
+                    )
+                  }
                 </time>
               </li>
             ))}
@@ -68,6 +75,13 @@ const { items } = Astro.props as { items: FeedItem[] }
           <time class="text-m text-stone-400 font-mono shrink-0 flex items-center gap-1 dark:text-stone-500">
             <Icon name="lucide:calendar-arrow-up" class="size-4" />
             {item.post.data.pubDate.toLocaleDateString('zh-CN')}
+            {
+              item.post.data.draft && (
+                <span class="ml-1 rounded-md border border-amber-200 px-1.5 py-0.5 text-xs text-amber-700 dark:border-amber-900 dark:text-amber-400">
+                  草稿
+                </span>
+              )
+            }
           </time>
         </li>
       )

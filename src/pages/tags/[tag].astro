@@ -4,12 +4,12 @@ import type { GetStaticPaths } from 'astro'
 import { Icon } from 'astro-icon/components'
 import Blog from '../../layouts/Blog.astro'
 import { SITE_TITLE } from '../../consts'
+import { getPostPath, getPosts } from '../../lib/posts'
 import { createTagItems } from '../../lib/tags'
-import { getPostPath } from '../../lib/posts'
 import type { TagItem } from '../../lib/tags'
 
 export const getStaticPaths = (async () => {
-  const posts = await getCollection('posts')
+  const posts = await getPosts()
   const tags = await getCollection('tags')
   const tagItems = createTagItems(posts, tags)
 

@@ -1,3 +1,4 @@
+import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
 
 export type Post = CollectionEntry<'posts'>
@@ -27,6 +28,10 @@ export type FeedPage = {
   data: FeedItem[]
 }
 
+export type PostQueryOptions = {
+  includeDrafts?: boolean
+}
+
 export type PostNavigation =
   | {
       type: 'series'
@@ -45,6 +50,24 @@ export type PostNavigation =
 const getSeriesOrder = (post: Post) => {
   return post.data.series?.order
 }
+
+const shouldIncludeDraftsByDefault = () => import.meta.env.DEV
+
+export const isDraftPost = (post: Post) => post.data.draft
+
+export const getPosts = async ({
+  includeDrafts = shouldIncludeDraftsByDefault(),
+}: PostQueryOptions = {}) => {
+  const posts = await getCollection('posts')
+
+  if (includeDrafts) {
+    return posts
+  }
+
+  return posts.filter(post => !isDraftPost(post))
+}
+
+export const getPublishedPosts = () => getPosts({ includeDrafts: false })
 
 export const sortPostsByDateDesc = (posts: Post[]) =>
   [...posts].sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())

@@ -1,13 +1,12 @@
 ---
 import { getCollection } from 'astro:content'
-import type { CollectionEntry } from 'astro:content'
 import Blog from '../layouts/Blog.astro'
 import { PAGE_SIZE, SERIES_PREVIEW_SIZE, SITE_TITLE } from '../consts'
 import { Icon } from 'astro-icon/components'
 import PostList from '../components/PostList.astro'
-import { createPostFeed, paginatePostFeed, sortPostsByDateDesc } from '../lib/posts'
+import { createPostFeed, getPosts, paginatePostFeed, sortPostsByDateDesc } from '../lib/posts'
 
-const posts: CollectionEntry<'posts'>[] = await getCollection('posts')
+const posts = await getPosts()
 const series = await getCollection('series')
 const feedItems = createPostFeed(sortPostsByDateDesc(posts), series)
 const pages = paginatePostFeed(feedItems, PAGE_SIZE, SERIES_PREVIEW_SIZE)

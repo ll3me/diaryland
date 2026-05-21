@@ -4,13 +4,13 @@ import type { CollectionEntry } from 'astro:content'
 import Blog from '../../layouts/Blog.astro'
 import { Icon } from 'astro-icon/components'
 import { SITE_TITLE } from '../../consts'
-import { getPostNavigation, getPostPath, getSeriesPath } from '../../lib/posts'
+import { getPostNavigation, getPostPath, getPosts, getSeriesPath } from '../../lib/posts'
 import type { PostNavigation } from '../../lib/posts'
 import { getPostTags, getTagPath, validatePostTags } from '../../lib/tags'
 import type { TagItem } from '../../lib/tags'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts')
+  const posts = await getPosts()
   const series = await getCollection('series')
   const tags = await getCollection('tags')
   validatePostTags(posts, tags)
@@ -48,6 +48,13 @@ const tocHeadings = headings.filter(heading => heading.depth >= 2 && heading.dep
       <p class="flex items-center gap-1">
         <Icon name="lucide:calendar-arrow-up" class="size-5" />
         {entry.data.pubDate.toLocaleDateString('zh-CN')}
+        {
+          entry.data.draft && (
+            <span class="ml-2 rounded-md border border-amber-200 px-2 py-0.5 font-mono text-xs text-amber-700 dark:border-amber-900 dark:text-amber-400">
+              草稿
+            </span>
+          )
+        }
       </p>
       {
         tags.length > 0 && (
