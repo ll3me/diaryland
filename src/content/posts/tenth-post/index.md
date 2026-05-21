@@ -2,6 +2,7 @@
 title: '补上夜间模式'
 description: '让主题状态在页面切换后继续保持，不被 Astro 的客户端路由重置。'
 pubDate: 2024-03-24
+updatedDate: 2024-03-27
 tags: ['theme', 'ux']
 series:
   slug: 'xxx'

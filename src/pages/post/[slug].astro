@@ -34,6 +34,8 @@ interface Props {
 const { entry, navigation, tags } = Astro.props
 const { Content, headings } = await entry.render()
 const tocHeadings = headings.filter(heading => heading.depth >= 2 && heading.depth <= 3)
+const shouldShowUpdatedDate =
+  entry.data.updatedDate && entry.data.updatedDate.valueOf() !== entry.data.pubDate.valueOf()
 ---
 
 <Blog
@@ -41,13 +43,24 @@ const tocHeadings = headings.filter(heading => heading.depth >= 2 && heading.dep
   description={entry.data.description}
   type="article"
   pubDate={entry.data.pubDate}
+  updatedDate={entry.data.updatedDate}
 >
   <article class="prose prose-stone max-w-none mt-6 dark:prose-invert">
     <h1 class="text-3xl font-bold mb-4">{entry.data.title}</h1>
     <div class="text-stone-500 mb-8 text-sm dark:text-stone-400">
-      <p class="flex items-center gap-1">
-        <Icon name="lucide:calendar-arrow-up" class="size-5" />
-        {entry.data.pubDate.toLocaleDateString('zh-CN')}
+      <p class="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <span class="inline-flex items-center gap-1">
+          <Icon name="lucide:calendar-arrow-up" class="size-5" />
+          发布于 {entry.data.pubDate.toLocaleDateString('zh-CN')}
+        </span>
+        {
+          shouldShowUpdatedDate && (
+            <span class="inline-flex items-center gap-1">
+              <Icon name="lucide:calendar-clock" class="size-5" />
+              更新于 {entry.data.updatedDate?.toLocaleDateString('zh-CN')}
+            </span>
+          )
+        }
         {
           entry.data.draft && (
             <span class="ml-2 rounded-md border border-amber-200 px-2 py-0.5 font-mono text-xs text-amber-700 dark:border-amber-900 dark:text-amber-400">

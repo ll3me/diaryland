@@ -2,6 +2,7 @@
 title: '增加系列详情页'
 description: '首页只展示系列预览，完整文章列表放到独立的系列页面里。'
 pubDate: 2024-03-25
+updatedDate: 2024-03-28
 tags: ['series', 'ux']
 series:
   slug: 'xxx'
