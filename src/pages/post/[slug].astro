@@ -18,7 +18,8 @@ interface Props {
 }
 
 const { entry } = Astro.props
-const { Content } = await entry.render()
+const { Content, headings } = await entry.render()
+const tocHeadings = headings.filter(heading => heading.depth >= 2 && heading.depth <= 3)
 ---
 
 <Blog
@@ -35,6 +36,34 @@ const { Content } = await entry.render()
         {entry.data.pubDate.toLocaleDateString('zh-CN')}
       </p>
     </div>
+    {
+      tocHeadings.length > 0 && (
+        <nav
+          aria-labelledby="toc-heading"
+          class="not-prose mb-8 rounded-lg border border-stone-200 bg-white/60 p-4 dark:border-stone-800 dark:bg-stone-950/40"
+        >
+          <h2
+            id="toc-heading"
+            class="mb-3 flex items-center gap-2 text-sm font-semibold text-stone-800 dark:text-stone-100"
+          >
+            <Icon name="lucide:list" class="size-4 text-blue-700 dark:text-sky-400" />
+            目录
+          </h2>
+          <ol class="space-y-2 text-sm leading-relaxed">
+            {tocHeadings.map(heading => (
+              <li class={heading.depth === 3 ? 'pl-4' : undefined}>
+                <a
+                  href={`#${heading.slug}`}
+                  class="text-stone-500 transition-colors hover:text-stone-900 hover:underline dark:text-stone-400 dark:hover:text-stone-100"
+                >
+                  {heading.text}
+                </a>
+              </li>
+            ))}
+          </ol>
+        </nav>
+      )
+    }
     <div class="text-stone-800 dark:text-stone-200">
       <Content />
     </div>
