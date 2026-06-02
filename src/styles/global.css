@@ -134,3 +134,154 @@
   text-align: right;
   user-select: none;
 }
+
+html.search-open {
+  overflow: hidden;
+}
+
+.search-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 70;
+  display: flex;
+  justify-content: center;
+  padding: 6rem 1rem 1rem;
+}
+
+.search-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgb(28 25 23 / 0.45);
+  backdrop-filter: blur(2px);
+}
+
+.search-panel {
+  position: relative;
+  width: 100%;
+  max-width: 36rem;
+  max-height: calc(100vh - 8rem);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: rgb(255 255 255);
+  border: 1px solid rgb(231 229 228);
+  border-radius: 0.75rem;
+  box-shadow: 0 20px 50px rgb(28 25 23 / 0.25);
+}
+
+.dark .search-panel {
+  background: rgb(12 10 9);
+  border-color: rgb(41 37 36);
+}
+
+.search-input-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid rgb(231 229 228);
+}
+
+.dark .search-input-row {
+  border-bottom-color: rgb(41 37 36);
+}
+
+.search-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: rgb(28 25 23);
+  font-size: 1rem;
+}
+
+.search-input::placeholder {
+  color: rgb(168 162 158);
+}
+
+.dark .search-input {
+  color: rgb(245 245 244);
+}
+
+.search-esc {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.7rem;
+  color: rgb(120 113 108);
+  border: 1px solid rgb(214 211 209);
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.4rem;
+}
+
+.dark .search-esc {
+  color: rgb(168 162 158);
+  border-color: rgb(68 64 60);
+}
+
+.search-results {
+  overflow-y: auto;
+  padding: 0.5rem;
+}
+
+.search-empty {
+  padding: 1rem;
+  color: rgb(120 113 108);
+  font-size: 0.9rem;
+}
+
+.dark .search-empty {
+  color: rgb(168 162 158);
+}
+
+.search-result-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.search-result {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: 0.5rem;
+  transition: background-color 160ms ease;
+}
+
+.search-result:hover {
+  background: rgb(245 245 244);
+}
+
+.dark .search-result:hover {
+  background: rgb(28 25 23);
+}
+
+.search-result-title {
+  font-weight: 500;
+  color: rgb(28 25 23);
+}
+
+.dark .search-result-title {
+  color: rgb(245 245 244);
+}
+
+.search-result-excerpt {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: rgb(120 113 108);
+}
+
+.dark .search-result-excerpt {
+  color: rgb(168 162 158);
+}
+
+.search-result-excerpt mark {
+  background: rgb(254 240 138);
+  color: inherit;
+  border-radius: 0.2rem;
+  padding: 0 0.1rem;
+}
+
+.dark .search-result-excerpt mark {
+  background: rgb(133 77 14);
+  color: rgb(254 249 195);
+}

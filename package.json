@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "astro": "astro"
@@ -21,6 +21,7 @@
     "@iconify-json/lucide": "^1.2.85",
     "@tailwindcss/typography": "^0.5.19",
     "autoprefixer": "^10.4.23",
+    "pagefind": "^1.5.2",
     "postcss": "^8.5.6",
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3"

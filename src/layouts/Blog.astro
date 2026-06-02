@@ -2,6 +2,7 @@
 import "../styles/global.css";
 import { ClientRouter } from "astro:transitions";
 import { Icon } from "astro-icon/components";
+import Search from "../components/Search.astro";
 import {
   SITE_TITLE,
   SITE_DESCRIPTION,
@@ -120,6 +121,14 @@ const canonicalUrl = new URL(
           <a href="/about" class="hover:text-stone-900 transition-colors dark:hover:text-stone-100">关于</a>
           <button
             type="button"
+            data-search-trigger
+            aria-label="搜索"
+            class="inline-flex size-6 items-center justify-center hover:text-stone-900 transition-colors dark:hover:text-stone-100"
+          >
+            <Icon name="lucide:search" class="size-5" />
+          </button>
+          <button
+            type="button"
             data-theme-toggle
             aria-label="切换夜间模式"
             class="inline-flex size-6 items-center justify-center hover:text-stone-900 transition-colors dark:hover:text-stone-100"
@@ -176,6 +185,7 @@ const canonicalUrl = new URL(
           }
         </div>
       </footer>
+      <Search />
       <script is:inline>
         (() => {
           if (window.__diarylandThemeController) return;

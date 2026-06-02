@@ -45,8 +45,8 @@ const shouldShowUpdatedDate =
   pubDate={entry.data.pubDate}
   updatedDate={entry.data.updatedDate}
 >
-  <article class="prose prose-stone max-w-none mt-6 dark:prose-invert">
-    <h1 class="text-3xl font-bold mb-4">{entry.data.title}</h1>
+  <article class="prose prose-stone max-w-none mt-6 dark:prose-invert" data-pagefind-body>
+    <h1 class="text-3xl font-bold mb-4" data-pagefind-meta="title">{entry.data.title}</h1>
     <div class="text-stone-500 mb-8 text-sm dark:text-stone-400">
       <p class="flex flex-wrap items-center gap-x-3 gap-y-2">
         <span class="inline-flex items-center gap-1">
@@ -91,6 +91,7 @@ const shouldShowUpdatedDate =
       tocHeadings.length > 0 && (
         <nav
           aria-labelledby="toc-heading"
+          data-pagefind-ignore
           class="not-prose mb-8 rounded-lg border border-stone-200 bg-white/60 p-4 dark:border-stone-800 dark:bg-stone-950/40"
         >
           <h2
@@ -122,6 +123,7 @@ const shouldShowUpdatedDate =
       navigation?.type === 'series' && (
         <nav
           aria-label="系列文章导航"
+          data-pagefind-ignore
           class="not-prose mt-10 border-y border-stone-200 py-5 dark:border-stone-800"
         >
           <div class="mb-4 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
@@ -179,6 +181,7 @@ const shouldShowUpdatedDate =
       navigation?.type === 'timeline' && (
         <nav
           aria-label="文章时间线导航"
+          data-pagefind-ignore
           class="not-prose mt-10 grid gap-3 border-y border-stone-200 py-5 dark:border-stone-800 sm:grid-cols-2"
         >
           {navigation.previous && (
