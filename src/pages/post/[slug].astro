@@ -71,7 +71,7 @@ const shouldShowUpdatedDate =
       </p>
       {
         tags.length > 0 && (
-          <ul class="mt-3 flex flex-wrap gap-2">
+          <ul class="not-prose mt-3 flex flex-wrap gap-2">
             {tags.map(tag => (
               <li>
                 <a
@@ -142,7 +142,10 @@ const shouldShowUpdatedDate =
             {navigation.previous && (
               <a
                 href={getPostPath(navigation.previous)}
-                class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+                class:list={[
+                  'group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900',
+                  { 'sm:col-span-2': !navigation.next },
+                ]}
               >
                 <span class="flex items-center gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
                   <Icon
@@ -159,7 +162,10 @@ const shouldShowUpdatedDate =
             {navigation.next && (
               <a
                 href={getPostPath(navigation.next)}
-                class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 text-right transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+                class:list={[
+                  'group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 text-right transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900',
+                  { 'sm:col-span-2': !navigation.previous },
+                ]}
               >
                 <span class="flex items-center justify-end gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
                   系列下一篇
@@ -187,7 +193,10 @@ const shouldShowUpdatedDate =
           {navigation.previous && (
             <a
               href={getPostPath(navigation.previous)}
-              class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+              class:list={[
+                'group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900',
+                { 'sm:col-span-2': !navigation.next },
+              ]}
             >
               <span class="flex items-center gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
                 <Icon
@@ -204,7 +213,10 @@ const shouldShowUpdatedDate =
           {navigation.next && (
             <a
               href={getPostPath(navigation.next)}
-              class="group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 text-right transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900"
+              class:list={[
+                'group flex min-h-20 flex-col justify-between rounded-lg border border-stone-200 p-3 text-right transition-colors hover:border-stone-300 hover:bg-stone-100 dark:border-stone-800 dark:hover:border-stone-700 dark:hover:bg-stone-900',
+                { 'sm:col-span-2': !navigation.previous },
+              ]}
             >
               <span class="flex items-center justify-end gap-1 font-mono text-xs text-stone-400 dark:text-stone-500">
                 下一篇

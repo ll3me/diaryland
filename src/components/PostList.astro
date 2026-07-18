@@ -25,11 +25,11 @@ const { items } = Astro.props as { items: FeedItem[] }
                   </h4>
                 </a>
                 {post.data.description && (
-                  <p class="mt-1 line-clamp-2 text-m leading-relaxed text-stone-500 dark:text-stone-400">
+                  <p class="mt-1 line-clamp-2 text-sm leading-relaxed text-stone-500 dark:text-stone-400">
                     {post.data.description}
                   </p>
                 )}
-                <time class="mt-2 flex shrink-0 items-center gap-1 font-mono text-m text-stone-400 dark:text-stone-500">
+                <time class="mt-2 flex shrink-0 items-center gap-1 font-mono text-sm text-stone-400 dark:text-stone-500">
                   <Icon name="lucide:calendar-arrow-up" class="size-4" />
                   {post.data.pubDate.toLocaleDateString('zh-CN')}
                   {
@@ -46,7 +46,7 @@ const { items } = Astro.props as { items: FeedItem[] }
               <li>
                 <a
                   href={getSeriesPath(item)}
-                  class="inline-flex items-center gap-1 rounded-lg p-2 -mx-2 font-mono text-m text-blue-700 transition-colors hover:text-blue-900 hover:underline dark:text-sky-400 dark:hover:text-sky-300 group"
+                  class="inline-flex items-center gap-1 rounded-lg p-2 -mx-2 font-mono text-sm text-blue-700 transition-colors hover:text-blue-900 hover:underline dark:text-sky-400 dark:hover:text-sky-300 group"
                 >
                   查看全部 {item.posts.length} 篇
                   <Icon
@@ -68,11 +68,11 @@ const { items } = Astro.props as { items: FeedItem[] }
             </a>
           </div>
           {item.post.data.description && (
-            <p class="text-stone-500 mt-1 line-clamp-2 text-m leading-relaxed dark:text-stone-400">
+            <p class="text-stone-500 mt-1 line-clamp-2 text-sm leading-relaxed dark:text-stone-400">
               {item.post.data.description}
             </p>
           )}
-          <time class="text-m text-stone-400 font-mono shrink-0 flex items-center gap-1 dark:text-stone-500">
+          <time class="text-sm text-stone-400 font-mono shrink-0 flex items-center gap-1 dark:text-stone-500">
             <Icon name="lucide:calendar-arrow-up" class="size-4" />
             {item.post.data.pubDate.toLocaleDateString('zh-CN')}
             {
