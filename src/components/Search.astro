@@ -107,51 +107,83 @@ import { Icon } from "astro-icon/components";
     );
   };
 
-  const setup = () => {
+  type SearchElements = {
+    modal: HTMLElement;
+    input: HTMLInputElement;
+    results: HTMLElement;
+  };
+
+  const searchWindow = window as typeof window & {
+    __diarylandSearchController?: boolean;
+  };
+
+  const getElements = (): SearchElements | null => {
     const modal = document.querySelector<HTMLElement>("[data-search-modal]");
     const input = document.querySelector<HTMLInputElement>("[data-search-input]");
     const results = document.querySelector<HTMLElement>("[data-search-results]");
+    if (!modal || !input || !results) return null;
+    return { modal, input, results };
+  };
+
+  const open = ({ modal, input }: SearchElements) => {
+    modal.hidden = false;
+    document.documentElement.classList.add("search-open");
+    window.requestAnimationFrame(() => input.focus());
+    loadPagefind();
+  };
+
+  const close = ({ modal, input, results }: SearchElements) => {
+    modal.hidden = true;
+    document.documentElement.classList.remove("search-open");
+    input.value = "";
+    renderState(results, "");
+  };
+
+  const setup = () => {
+    const elements = getElements();
+    if (!elements) return;
+
     const overlay = document.querySelector<HTMLElement>("[data-search-overlay]");
-    if (!modal || !input || !results) return;
-
-    const open = () => {
-      modal.hidden = false;
-      document.documentElement.classList.add("search-open");
-      window.requestAnimationFrame(() => input.focus());
-      loadPagefind();
-    };
-
-    const close = () => {
-      modal.hidden = true;
-      document.documentElement.classList.remove("search-open");
-      input.value = "";
-      renderState(results, "");
-    };
 
     document.querySelectorAll("[data-search-trigger]").forEach((trigger) => {
-      trigger.addEventListener("click", open);
+      trigger.addEventListener("click", () => open(elements));
     });
 
-    overlay?.addEventListener("click", close);
+    overlay?.addEventListener("click", () => close(elements));
 
-    input.addEventListener("input", () => {
+    elements.input.addEventListener("input", () => {
       window.clearTimeout(debounceTimer);
-      debounceTimer = window.setTimeout(() => runSearch(input.value, results), 180);
+      debounceTimer = window.setTimeout(
+        () => runSearch(elements.input.value, elements.results),
+        180,
+      );
     });
+  };
+
+  // document 级别的监听只注册一次；每次导航后元素会重建，所以事件触发时重新查询 DOM
+  if (!searchWindow.__diarylandSearchController) {
+    searchWindow.__diarylandSearchController = true;
 
     document.addEventListener("keydown", (event) => {
+      const elements = getElements();
+      if (!elements) return;
+
       const isShortcut =
         (event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k";
       if (isShortcut) {
         event.preventDefault();
-        modal.hidden ? open() : close();
+        if (elements.modal.hidden) {
+          open(elements);
+        } else {
+          close(elements);
+        }
         return;
       }
-      if (event.key === "Escape" && !modal.hidden) {
-        close();
+      if (event.key === "Escape" && !elements.modal.hidden) {
+        close(elements);
       }
     });
-  };
 
-  document.addEventListener("astro:page-load", setup);
+    document.addEventListener("astro:page-load", setup);
+  }
 </script>
