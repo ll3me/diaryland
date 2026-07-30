@@ -1,0 +1,37 @@
+---
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import PostPage from '../../../components/PostPage.astro'
+import { getPostNavigation, getPosts } from '../../../lib/posts'
+import type { PostNavigation } from '../../../lib/posts'
+import { getPostTags, validatePostTags } from '../../../lib/tags'
+import type { TagItem } from '../../../lib/tags'
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  const series = await getCollection('series')
+  const tags = await getCollection('tags')
+  validatePostTags(posts, tags)
+
+  return posts
+    .filter(entry => entry.data.series)
+    .map(entry => ({
+      params: { series: entry.data.series!.slug, slug: entry.slug },
+      props: {
+        entry,
+        navigation: getPostNavigation(entry, posts, series),
+        tags: getPostTags(entry, tags),
+      },
+    }))
+}
+
+interface Props {
+  entry: CollectionEntry<'posts'>
+  navigation: PostNavigation | null
+  tags: Pick<TagItem, 'title' | 'slug'>[]
+}
+
+const props = Astro.props as Props
+---
+
+<PostPage {...props} />

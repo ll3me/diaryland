@@ -42,8 +42,11 @@ describe('isDraftPost', () => {
 
 describe('path helpers', () => {
   it('builds post and series paths', () => {
-    expect(getPostPath({ slug: 'hello' })).toBe('/post/hello')
-    expect(getSeriesPath({ slug: 'guide' })).toBe('/series/guide')
+    expect(getPostPath(makePost({ slug: 'hello' }))).toBe('/writing/hello')
+    expect(
+      getPostPath(makePost({ slug: 'setup', series: { slug: 'astro-guide', order: 1 } }))
+    ).toBe('/writing/astro-guide/setup')
+    expect(getSeriesPath({ slug: 'guide' })).toBe('/writing/guide')
   })
 })
 

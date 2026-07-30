@@ -1,0 +1,59 @@
+---
+import { getCollection } from 'astro:content'
+import type { CollectionEntry } from 'astro:content'
+import PostPage from '../../components/PostPage.astro'
+import SeriesPage from '../../components/SeriesPage.astro'
+import {
+  createSeriesItems,
+  getPostNavigation,
+  getPosts,
+  sortPostsByDateDesc,
+} from '../../lib/posts'
+import type { PostNavigation, SeriesItem } from '../../lib/posts'
+import { getPostTags, validatePostTags } from '../../lib/tags'
+import type { TagItem } from '../../lib/tags'
+
+export async function getStaticPaths() {
+  const posts = await getPosts()
+  const seriesEntries = await getCollection('series')
+  const tags = await getCollection('tags')
+  validatePostTags(posts, tags)
+
+  const postPages = posts
+    .filter(entry => !entry.data.series)
+    .map(entry => ({
+      params: { slug: entry.slug },
+      props: {
+        page: {
+          type: 'post' as const,
+          entry,
+          navigation: getPostNavigation(entry, posts, seriesEntries),
+          tags: getPostTags(entry, tags),
+        },
+      },
+    }))
+
+  const seriesPages = createSeriesItems(sortPostsByDateDesc(posts), seriesEntries).map(series => ({
+    params: { slug: series.slug },
+    props: { page: { type: 'series' as const, series } },
+  }))
+
+  return [...postPages, ...seriesPages]
+}
+
+type PageProps =
+  | {
+      type: 'post'
+      entry: CollectionEntry<'posts'>
+      navigation: PostNavigation | null
+      tags: Pick<TagItem, 'title' | 'slug'>[]
+    }
+  | {
+      type: 'series'
+      series: SeriesItem
+    }
+
+const { page } = Astro.props as { page: PageProps }
+---
+
+{page.type === 'post' ? <PostPage {...page} /> : <SeriesPage series={page.series} />}

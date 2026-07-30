@@ -1,29 +1,12 @@
 ---
-import { getCollection } from 'astro:content'
 import type { CollectionEntry } from 'astro:content'
-import Blog from '../../layouts/Blog.astro'
+import Blog from '../layouts/Blog.astro'
 import { Icon } from 'astro-icon/components'
-import { SITE_TITLE } from '../../consts'
-import { getPostNavigation, getPostPath, getPosts, getSeriesPath } from '../../lib/posts'
-import type { PostNavigation } from '../../lib/posts'
-import { getPostTags, getTagPath, validatePostTags } from '../../lib/tags'
-import type { TagItem } from '../../lib/tags'
-
-export async function getStaticPaths() {
-  const posts = await getPosts()
-  const series = await getCollection('series')
-  const tags = await getCollection('tags')
-  validatePostTags(posts, tags)
-
-  return posts.map(entry => ({
-    params: { slug: entry.slug },
-    props: {
-      entry,
-      navigation: getPostNavigation(entry, posts, series),
-      tags: getPostTags(entry, tags),
-    },
-  }))
-}
+import { SITE_TITLE } from '../consts'
+import { getPostPath, getSeriesPath } from '../lib/posts'
+import type { PostNavigation } from '../lib/posts'
+import { getTagPath } from '../lib/tags'
+import type { TagItem } from '../lib/tags'
 
 interface Props {
   entry: CollectionEntry<'posts'>

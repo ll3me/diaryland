@@ -1,7 +1,7 @@
 ---
 import { Icon } from 'astro-icon/components'
 import { SERIES_PREVIEW_SIZE } from '../consts'
-import { getSeriesPath } from '../lib/posts'
+import { getPostPath, getSeriesPath } from '../lib/posts'
 import type { FeedItem } from '../lib/posts'
 
 const { items } = Astro.props as { items: FeedItem[] }
@@ -19,7 +19,7 @@ const { items } = Astro.props as { items: FeedItem[] }
           <ol class="ml-3 flex flex-col gap-3 border-l border-stone-200 pl-4 dark:border-stone-800">
             {item.posts.slice(0, SERIES_PREVIEW_SIZE).map(post => (
               <li class="group rounded-lg p-2 -mx-2 transition-colors hover:bg-stone-100 dark:hover:bg-stone-900">
-                <a href={`/post/${post.slug}`} class="block hover:underline">
+                <a href={getPostPath(post)} class="block hover:underline">
                   <h4 class="text-xl font-medium text-stone-800 transition-colors group-hover:text-stone-600 dark:text-stone-100 dark:group-hover:text-stone-300">
                     {post.data.title}
                   </h4>
@@ -61,7 +61,7 @@ const { items } = Astro.props as { items: FeedItem[] }
       ) : (
         <li class="group flex flex-col gap-2 hover:bg-stone-100 p-2 -mx-2 rounded-lg transition-colors dark:hover:bg-stone-900">
           <div class="sm:flex-row sm:justify-between sm:items-baseline">
-            <a href={`/post/${item.post.slug}`} class="block hover:underline">
+            <a href={getPostPath(item.post)} class="block hover:underline">
               <h3 class="text-2xl font-medium text-stone-800 group-hover:text-stone-600 transition-colors dark:text-stone-100 dark:group-hover:text-stone-300">
                 {item.post.data.title}
               </h3>

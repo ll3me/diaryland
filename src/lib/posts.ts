@@ -202,9 +202,15 @@ export const paginatePostFeed = (
   }))
 }
 
-export const getSeriesPath = (series: Pick<SeriesItem, 'slug'>) => `/series/${series.slug}`
+export const getSeriesPath = (series: Pick<SeriesItem, 'slug'>) => `/writing/${series.slug}`
 
-export const getPostPath = (post: Pick<Post, 'slug'>) => `/post/${post.slug}`
+export const getPostPath = (post: Pick<Post, 'slug' | 'data'>) => {
+  const seriesSlug = post.data.series?.slug
+
+  return seriesSlug
+    ? `/writing/${seriesSlug}/${post.slug}`
+    : `/writing/${post.slug}`
+}
 
 export const getPostNavigation = (
   currentPost: Post,

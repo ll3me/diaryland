@@ -1,7 +1,7 @@
 import rss from "@astrojs/rss";
 import type { APIContext } from "astro";
 import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
-import { getPublishedPosts } from "../lib/posts";
+import { getPostPath, getPublishedPosts } from "../lib/posts";
 
 export async function GET(context: APIContext) {
   const posts = await getPublishedPosts();
@@ -19,7 +19,7 @@ export async function GET(context: APIContext) {
       title: post.data.title,
       description: post.data.description,
       pubDate: post.data.pubDate,
-      link: `/post/${post.slug}/`,
+      link: `${getPostPath(post)}/`,
     })),
     customData: "<language>zh-CN</language>",
   });
